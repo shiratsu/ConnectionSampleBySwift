@@ -13,23 +13,22 @@
 @implementation ConnectionBySession
 
 @synthesize delegate;
-@synthesize urlStr;
 @synthesize connectedData;
 @synthesize status;
 @synthesize session;
 
--(id)initWithUrl:(NSString *)urlArgStr{
+-(id)init{
     if (self = [super init]) {
         // 初期処理
-        self.urlStr = urlArgStr;
         self.connectedData = [[NSMutableData alloc] init];
     }
     return self;
 }
 
--(void)doConncet{
+-(void)doConncet:(NSString *)urlArgStr{
     
-    NSURL* url = [NSURL URLWithString:[self.urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    NSURL* url = [NSURL URLWithString:[urlArgStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    NSLog(@"%@",urlArgStr);
     NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
     config.timeoutIntervalForRequest = 15;
     self.session = [NSURLSession sessionWithConfiguration:config
