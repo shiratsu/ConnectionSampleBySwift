@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         
         connectionsession = ConnectionBySession()
         connectionsession.delegate = self
-        connectionsession.doConncet("http://dev.swallow.cu01.shotlabo.info/sw/app/work?output=json&start=1&key_api=key_001&results=20&prefcode=13&a=03&apliflag=1")
+        connectionsession.doConncet("http://xxxxxxxxxxxxxxxxxx/sw/app/work?output=json&start=1&key_api=key_001&results=20&prefcode=13&a=03&apliflag=1")
     }
 
     override func didReceiveMemoryWarning() {
