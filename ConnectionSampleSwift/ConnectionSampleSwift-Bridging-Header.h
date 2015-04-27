@@ -3,4 +3,5 @@
 //
 
 #import "ConnectionBySession.h"
+#import "ConnectionBySessionForMultitask.h"
 #import "ConnectionBySessionResult.h"

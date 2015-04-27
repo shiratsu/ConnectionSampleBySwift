@@ -16,9 +16,23 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        
+    }
+    @IBAction func singleAction(sender: AnyObject) {
+        
         connectionsession = ConnectionBySession()
         connectionsession.delegate = self
-        connectionsession.doConncet("http://dev.swallow.cu01.shotlabo.info/sw/app/work?output=json&start=1&key_api=key_001&results=20&prefcode=13&a=03&apliflag=1")
+        connectionsession.doConncet("http://dev.swallow.cu01.shotlabo.info/sw/app/work?output=json&start=1&key_api=key_001&results=20&prefcode=13&a=01&apliflag=1")
+        
+    }
+    @IBAction func multiAction(sender: AnyObject) {
+        
+        let connectionmulti = ConnectionBySessionForMultitask()
+        connectionmulti.delegate = self
+
+        let urlary:NSArray = ["http://dev.swallow.cu01.shotlabo.info/sw/app/work?output=json&start=1&key_api=key_001&results=20&prefcode=13&a=01&apliflag=1","http://dev.swallow.cu01.shotlabo.info/sw/app/work?output=json&start=1&key_api=key_001&results=20&prefcode=22&a=02&apliflag=1"]
+        connectionmulti.doMultiTask(urlary as [AnyObject])
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,6 +68,10 @@ extension  ViewController:ConnectionBySessionResult {
             handleError()
             return
         }
+        
+    }
+    
+    func completeMultitask(){
         
     }
     

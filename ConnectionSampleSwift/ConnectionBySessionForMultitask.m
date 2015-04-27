@@ -1,48 +1,54 @@
 //
-//  ConnectionBySession.m
-//  ConnectionBySession
+//  ConnectionBySessionForMultitask.m
+//  ConnectionSampleSwift
 //
-//  Created by 平塚 俊輔 on 2015/04/09.
+//  Created by 平塚 俊輔 on 2015/04/24.
 //  Copyright (c) 2015年 平塚 俊輔. All rights reserved.
 //
 
-#import "ConnectionBySession.h"
+#import "ConnectionBySessionForMultitask.h"
 
-
-
-@implementation ConnectionBySession
+@implementation ConnectionBySessionForMultitask
 
 @synthesize delegate;
 @synthesize connectedData;
 @synthesize status;
 @synthesize session;
+@synthesize datadic;
+@synthesize taskcount;
 
 -(id)init{
     if (self = [super init]) {
         // 初期処理
         self.connectedData = [[NSMutableData alloc] init];
+        self.datadic = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
-
--(void)doConncet:(NSString *)urlArgStr{
+-(void)doMultiTask:(NSArray *)urlary{
     
-    NSURL* url = [NSURL URLWithString:[urlArgStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    NSLog(@"%@",urlArgStr);
     NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
     config.timeoutIntervalForRequest = 15;
-    self.session = [NSURLSession sessionWithConfiguration:config
-                                                 delegate:self
-                                            delegateQueue:[NSOperationQueue mainQueue]];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config
+                                                          delegate:self
+                                                     delegateQueue:[NSOperationQueue mainQueue]];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    //現在のタスクをカウントしておく
+    taskcount = [urlary count];
     
-    NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request];
-    
-    [task resume];
+    for (int i = 0; i < [urlary count]; i++) {
+        NSString *urlstr = [urlary objectAtIndex:i];
+        NSURL* url = [NSURL URLWithString:[urlstr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        
+        NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request];
+        
+        [task resume];
+        
+    }
     
 }
-
 
 -(void)cancelConnect{
     
@@ -86,8 +92,18 @@
 }
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data{
     
-    [self.connectedData appendData:data];
-    [self.delegate showResult];
+    for(int i=1;i<=taskcount;i++){
+        
+        if(dataTask.taskIdentifier == i){
+            NSMutableData *rData = [[NSMutableData alloc] init];
+            [rData appendData:data];
+            [datadic setObject:rData forKey:[NSString stringWithFormat:@"%d",i]];
+        }
+        
+    }
+    
+    
+    [self.delegate completeMultitask];
     
 }
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error{
@@ -108,5 +124,9 @@
         
     }
 }
+
+
+
+
 
 @end

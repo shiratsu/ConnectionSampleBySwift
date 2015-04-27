@@ -1,29 +1,31 @@
 //
-//  ConnectionBySession.h
-//  ConnectionBySession
+//  ConnectionBySessionForMultitask.h
+//  ConnectionSampleSwift
 //
-//  Created by 平塚 俊輔 on 2015/04/09.
+//  Created by 平塚 俊輔 on 2015/04/24.
 //  Copyright (c) 2015年 平塚 俊輔. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "ConnectionBySessionResult.h"
 
-@interface ConnectionBySession : NSObject<NSURLSessionDataDelegate>
+@interface ConnectionBySessionForMultitask : NSObject<NSURLSessionDataDelegate>
 {
+    NSMutableDictionary *datadic;
     NSMutableData *connectedData;
     NSInteger status;
     NSURLSession *session;
+    int taskcount;
     
 }
 @property(assign,nonatomic) id<ConnectionBySessionResult> delegate;
+@property(strong,nonatomic) NSMutableDictionary *datadic;
 @property(strong,nonatomic) NSMutableData *connectedData;
 @property(assign,nonatomic) NSInteger status;
 @property(strong,nonatomic) NSURLSession *session;
+@property(assign,nonatomic) int taskcount;
 
-
--(void)doConncet:(NSString *)urlArgStr;
-
+-(void)doMultiTask:(NSArray *)urlary;
 -(void)cancelConnect;
 -(void)cancelTasksByUrl:(NSArray *)tasks;
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler;

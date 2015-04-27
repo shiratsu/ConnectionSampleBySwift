@@ -11,6 +11,7 @@
 @protocol ConnectionBySessionResult <NSObject>
 
 - (void)showResult;
+- (void)completeMultitask;
 - (void)handleErrorForConnection;
 
 @end
